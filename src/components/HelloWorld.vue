@@ -41,14 +41,22 @@ export default {
           title:'CIA wants to know your location',
           seen:true,
           timestamp: 1491106507
-        },
+        }
       ]
     }
   },
   methods: {
     markAsSeen: function(index){
       this.notifications[index].seen = true;
+    },
+    sortNotifications: function(){
+      this.notifications.sort(function(a,b){
+        return a.timestamp - b.timestamp
+      })
     }
+  },
+  beforeMount(){ //pre nego sto se postavi sve, aktiviraj ovo da se sortira, jel to?
+    this.sortNotifications()
   }
 }
 </script>
