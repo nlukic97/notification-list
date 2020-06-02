@@ -5,6 +5,7 @@
           <div class="">
             <span class="circle" @click="markAsSeen(index)"></span>
             <span>{{notification.title}}</span>
+            <span class="date">{{notification.timestamp}}</span>
           </div>
         </li>
     </ul>
@@ -42,21 +43,34 @@ export default {
           seen:true,
           timestamp: 1491106507
         }
-      ]
+      ],
+      dateSettings: {
+        day: 'numeric', 
+        month: 'long', 
+        year:'numeric', 
+        hour:'numeric',
+        minute:'numeric'
+        }
     }
   },
   methods: {
     markAsSeen: function(index){
       this.notifications[index].seen = true;
     },
-    sortNotifications: function(){
+    sortNotifications: function(){ //solution to displaying most recent - arr.sort(callback())
       this.notifications.sort(function(a,b){
-        return a.timestamp - b.timestamp
+        return b.timestamp - a.timestamp; //mixed this up originally
       })
+    },
+    displayHumanReadDate: function(){ //changing each individual array timestamp to human readable text
+      for(var i = 0; i < this.notifications.length; i++){
+        this.notifications[i].timestamp = new Date(this.notifications[i].timestamp * 1000).toLocaleString("en-US", this.dateSettings)
+      }
     }
   },
   beforeMount(){ //pre nego sto se postavi sve, aktiviraj ovo da se sortira, jel to?
-    this.sortNotifications()
+    this.sortNotifications();
+    this.displayHumanReadDate();
   }
 }
 </script>
@@ -68,7 +82,7 @@ export default {
   }
 
   li {
-    max-width: 500px;
+    max-width: 550px;
     text-align: left;
     margin: 0 auto;
     background: rgb(43, 218, 209);
@@ -93,4 +107,12 @@ export default {
     display:inline-block;
     margin: 0 10px;
   }
-</style> 
+  .circle:hover {
+    cursor: pointer;
+  }
+
+  .date {
+    float:right;
+    margin-right: 20px;
+  }
+  </style> 
